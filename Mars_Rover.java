@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+//Class Coordinate has two information x and y. 
+// two methods to find the coordinate.
 class Coordinate {
     private int x;
     private int y;
@@ -105,6 +107,10 @@ abstract class AbstractRover implements Movable, Turnable, Positionable {
     public Coordinate getCurrentPosition() {
         return position;
     }
+    public String getCurrentDirection() {
+        return direction;
+    }
+    public abstract String generateStatusReport();
 }
 
 //Class  BasicRover is a child class of AbstractRover class(Parent class)
@@ -113,6 +119,19 @@ abstract class AbstractRover implements Movable, Turnable, Positionable {
 class BasicRover extends AbstractRover {
     public BasicRover(Grid grid, List<Obstacle> obstacles, Logger logger) {
         super(grid, obstacles, logger);
+    }
+
+    @Override    
+    public String generateStatusReport() {
+        String status = "Rover is at (" + position.getX() + ", " + position.getY() + ") facing " + direction + ". ";
+        
+        if (isObstacleAt(position.getX(), position.getY())) {
+            status += "Obstacle detected.";
+        } else {
+            status += "No Obstacles detected.";
+        }
+        
+        return status;
     }
     //implementation of movable interface's move() method
     @Override
@@ -156,13 +175,14 @@ class BasicRover extends AbstractRover {
         //if true then the position is updated.
         if (!isObstacleAt(x, y)) {
             position = new Coordinate(x, y);
-            logger.log("(" + x + "," + y + "," + direction+")");
+            // logger.log("(" + x + "," + y + "," + direction+")");
         } else {
             logger.log("Cannot move. Obstacle detected at (" + x + "," + y + ")");
         }
     }
     //implementation of Turnable interface's turnLeft method
     //based on the previous direction, it is updated accordingly.
+
     @Override
     public void turnLeft() {
         switch (direction) {
@@ -180,7 +200,7 @@ class BasicRover extends AbstractRover {
                 break;
         }
 
-        logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
+        // logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
     }
     //implementation of Turnable interface's turnRight method
     //based on the previous direction, it is updated accordingly.
@@ -201,7 +221,7 @@ class BasicRover extends AbstractRover {
                 break;
         }
 
-        logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
+        // logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
     }
     //This method checks if the coordinates are one of the obstacle coordinates by comparing it with current coordinates
     private boolean isObstacleAt(int x, int y) {
@@ -217,28 +237,43 @@ class BasicRover extends AbstractRover {
 //Main Class Mars_Rover
 class Mars_Rover {
     public static void main(String[] args) {
-        Grid grid = new Grid(10, 10); //Create a 10 x 10 grid
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter grid size (width height): ");
+        int width = scanner.nextInt();
+        int height = scanner.nextInt();
+        Grid grid = new Grid(width,height); //Create a 10 x 10 grid
+        System.out.println("Enter total number of obstacles: ");
+        int totalObstacles = scanner.nextInt();
         List<Obstacle> obstacles = new ArrayList<>(); //List of obstacle coordinates.
         //Added obstacles coordinates
-        obstacles.add(new Obstacle(2, 2)); 
-        obstacles.add(new Obstacle(3, 5));
+        for (int i = 0; i < totalObstacles; i++) {
+            System.out.println("Enter obstacle coordinates (x y): ");
+            int x = scanner.nextInt();
+            int y = scanner.nextInt();
+            obstacles.add(new Obstacle(x, y));
+        }
         Logger logger = new Logger();
         //Created an object referencing BasicRover of type AbstractRover. 
-
         AbstractRover rover = new BasicRover(grid, obstacles, logger);
 
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to Rover Control Program.");
-        System.out.println("Commands: 'M' to move, 'L' to turn left, 'R' to turn right, 'C' to get current position, 'Q' to quit.");
+        System.out.println("Commands: 'M' to move, 'L' to turn left, 'R' to turn right, 'C' to get current position, 'F' to get the Final position.'S' to get the Status Report. 'Q' to quit.");
 
         char command;
+        boolean isFinalCommandReceived = false;
         //Try catch block is used. If error appears, the corresponding error message is printed.
         do {
             System.out.println("Enter command: ");
             command = scanner.next().charAt(0);
 
-            if (command != 'Q') {
+            if (command == 'F') {
+                isFinalCommandReceived = true;
+            } else if (command == 'S') {
+                String statusReport = rover.generateStatusReport();
+                logger.log("Status Report: " + statusReport);
+            }
+            else if (command != 'Q') {
                 try {
                     switch (command) {
                         case 'M':
@@ -255,12 +290,19 @@ class Mars_Rover {
                             logger.log("Current position: (" + currentPosition.getX() + "," + currentPosition.getY() + ")");
                             break;
                         default:
-                            logger.log("Invalid command. Use 'M' to move, 'L' to turn left, 'R' to turn right, 'C' to get current position, 'Q' to quit.");
+                            logger.log("Invalid command. Use 'M' to move, 'L' to turn left, 'R' to turn right, 'C' to get current position,'F' to get final position,'S' to get status report. 'Q' to quit.");
                     }
                 } catch (BoundaryViolationException e) {
                     logger.log("Error: " + e.getMessage());
                 }
             }
-        } while (command != 'Q');
+        } while (!isFinalCommandReceived && command != 'Q');
+        if (isFinalCommandReceived) {
+            Coordinate currentPosition = rover.getCurrentPosition();
+            String currentDirection = rover.getCurrentDirection();
+            logger.log("Final position: (" + currentPosition.getX() + "," + currentPosition.getY() + "," + currentDirection + ")");
+        }
+
+        scanner.close();
     }
 }
