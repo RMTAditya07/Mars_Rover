@@ -49,3 +49,16 @@ class Obstacle{
     }
 }
 
+//This class is to print the Necessary Message 
+class Logger {
+    public void log(String message) {
+        System.out.println(message);
+    }
+}
+
+//Exception Handling when the rover tries to move beyond the boundary limit
+class BoundaryViolationException extends Exception {
+    public BoundaryViolationException(String message) {
+        super(message);
+    }
+}
