@@ -21,7 +21,6 @@ class Coordinate {
 }
 
 //The class Grid represents the boundaries of the rectangle grid. It contains two piece of information [width and height]. They are private. Hence can be only accessed within the class.
-
 //It has two methods [getWidth, getHeight] to find out the width and height
 class Grid{
     private int width; 
@@ -36,5 +35,16 @@ class Grid{
     }
     public int getHeight(){
         return height;
+    }
+}
+
+//Class Obstacle contains the coordinates of the obstacles in a grid. 
+class Obstacle{
+    private Coordinate coordinate;
+    public Obstacle(int x,int y){
+        this.coordinate = new Coordinate(x,y);
+    }
+    public Coordinate getCoordinate(){
+        return coordinate;
     }
 }
