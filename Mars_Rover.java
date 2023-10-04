@@ -214,3 +214,53 @@ class BasicRover extends AbstractRover {
     }
    
 }
+//Main Class Mars_Rover
+class Mars_Rover {
+    public static void main(String[] args) {
+        Grid grid = new Grid(10, 10); //Create a 10 x 10 grid
+        List<Obstacle> obstacles = new ArrayList<>(); //List of obstacle coordinates.
+        //Added obstacles coordinates
+        obstacles.add(new Obstacle(2, 2)); 
+        obstacles.add(new Obstacle(3, 5));
+        Logger logger = new Logger();
+        //Created an object referencing BasicRover of type AbstractRover. 
+
+        AbstractRover rover = new BasicRover(grid, obstacles, logger);
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to Rover Control Program.");
+        System.out.println("Commands: 'M' to move, 'L' to turn left, 'R' to turn right, 'C' to get current position, 'Q' to quit.");
+
+        char command;
+        //Try catch block is used. If error appears, the corresponding error message is printed.
+        do {
+            System.out.println("Enter command: ");
+            command = scanner.next().charAt(0);
+
+            if (command != 'Q') {
+                try {
+                    switch (command) {
+                        case 'M':
+                            rover.move();
+                            break;
+                        case 'L':
+                            rover.turnLeft();
+                            break;
+                        case 'R':
+                            rover.turnRight();
+                            break;
+                        case 'C':
+                            Coordinate currentPosition = rover.getCurrentPosition();
+                            logger.log("Current position: (" + currentPosition.getX() + "," + currentPosition.getY() + ")");
+                            break;
+                        default:
+                            logger.log("Invalid command. Use 'M' to move, 'L' to turn left, 'R' to turn right, 'C' to get current position, 'Q' to quit.");
+                    }
+                } catch (BoundaryViolationException e) {
+                    logger.log("Error: " + e.getMessage());
+                }
+            }
+        } while (command != 'Q');
+    }
+}
