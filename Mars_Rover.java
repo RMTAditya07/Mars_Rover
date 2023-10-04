@@ -79,3 +79,30 @@ interface Turnable {
 interface Positionable {
     Coordinate getCurrentPosition();
 }
+
+//It provides a common structure for different types of rovers. 
+//It implements the Movable, Turnable, and Positionable interfaces.
+//It has attributes like position, direction, grid, obstacles, and logger.
+//Any Rover have these characteristics
+//Can create rover of desired type using this abstract rover. 
+abstract class AbstractRover implements Movable, Turnable, Positionable {
+    protected Coordinate position;
+    protected String direction;
+    protected Grid grid;
+    protected List<Obstacle> obstacles;
+    protected Logger logger;
+
+    public AbstractRover(Grid grid, List<Obstacle> obstacles, Logger logger) {
+        //initial state
+        this.position = new Coordinate(0, 0);
+        this.direction = "North";
+        this.grid = grid;
+        this.obstacles = obstacles;
+        this.logger = logger;
+    }
+    //implementation of the getCurrentPosition method required by Positionable interface
+    @Override
+    public Coordinate getCurrentPosition() {
+        return position;
+    }
+}
