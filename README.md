@@ -35,7 +35,7 @@ Programming, design patterns, and avoid using if-else conditional constructs.
   - `BasicRover extends the AbstractRover i.e it inherits the behaviour defined in AbstractRover`
    
 3. Polymorphism :
-  - It allows the objects to be treated as instances of their super classse.
+  - It allows the objects to be treated as instances of their super classes.
   - Interfaces are Movable, Turnable and Positionable.
   - Both AbstractRover and BasicRover implement these interfaces,  which allows them to be used interchangeably wherever these interfaces are expected.
 4. Abstraction
