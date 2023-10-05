@@ -29,7 +29,7 @@ Programming, design patterns, and avoid using if-else conditional constructs.
 
 ## Principles Followed
 1. Encapsulation :
-  - It is the concept of bundlling data and methods that operate  on the data into a single unit called class.
+  - It is the concept of bundling data and methods that operate  on the data into a single unit called class.
 2. Inheritance : 
   - It is a machanism in Java where one class can inherit the fields and methods from another class.
   - `BasicRover extends the AbstractRover i.e it inherits the behaviour defined in AbstractRover`
@@ -51,7 +51,7 @@ Programming, design patterns, and avoid using if-else conditional constructs.
   -  For example, Coordinate handles coordinates, Grid manages the grid dimensions, Obstacle represents obstacles, and Logger handles logging.
 10. Open-Closed Principle (OCP)
   -  This principle emphasizes that software entities (e.g., classes, modules, functions) should be open for extension but closed for modification.
-  -  For example, if you wanted to create a new type of rover with additional features, you could do so by creating a new class that extends AbstractRover without having to modify the existing rover classes.
+  -  For example, if a new type of rover has to be created with additional features,it can be done by creating a new class that extends AbstractRover without having to modify the existing rover classes.
 11. Liskov Substituition Principle (LSP)
   - This principle states that objects of a superclass should be replaceable with objects of a subclass without affecting the correctness of the program.
   - BasicRover is a subclass of AbstractRover.
