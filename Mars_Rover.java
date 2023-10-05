@@ -94,10 +94,10 @@ abstract class AbstractRover implements Movable, Turnable, Positionable {
     protected List<Obstacle> obstacles;
     protected Logger logger;
 
-    public AbstractRover(Grid grid, List<Obstacle> obstacles, Logger logger) {
+    public AbstractRover(Grid grid, List<Obstacle> obstacles, Logger logger, Coordinate startingPosition, String startingDirection) {
         //initial state
-        this.position = new Coordinate(0, 0);
-        this.direction = "North";
+        this.position = startingPosition;
+        this.direction = startingDirection;
         this.grid = grid;
         this.obstacles = obstacles;
         this.logger = logger;
@@ -117,8 +117,8 @@ abstract class AbstractRover implements Movable, Turnable, Positionable {
 //it provides  concrete implementation with specific movement and turning behaviour.
 //BasicRover can build upon the general behaviour provided by AbstractRover
 class BasicRover extends AbstractRover {
-    public BasicRover(Grid grid, List<Obstacle> obstacles, Logger logger) {
-        super(grid, obstacles, logger);
+    public BasicRover(Grid grid, List<Obstacle> obstacles, Logger logger,Coordinate startingPosition, String startingDirection) {
+        super(grid, obstacles, logger,startingPosition,startingDirection);
     }
 
     @Override    
@@ -253,8 +253,14 @@ class Mars_Rover {
             obstacles.add(new Obstacle(x, y));
         }
         Logger logger = new Logger();
+        
+        System.out.println("Enter starting position and direction (x y direction): ");
+        int x = scanner.nextInt();
+        int y = scanner.nextInt();
+        String direction = scanner.next();
+        
         //Created an object referencing BasicRover of type AbstractRover. 
-        AbstractRover rover = new BasicRover(grid, obstacles, logger);
+        AbstractRover rover = new BasicRover(grid, obstacles, logger, new Coordinate(x, y), direction);
 
 
         System.out.println("Welcome to Rover Control Program.");
