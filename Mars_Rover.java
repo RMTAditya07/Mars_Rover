@@ -103,6 +103,14 @@ abstract class AbstractRover implements Movable, Turnable, Positionable {
         this.logger = logger;
     }
     //implementation of the getCurrentPosition method required by Positionable interface
+    protected boolean isObstacleAt(int x, int y) {
+        for (Obstacle obstacle : obstacles) {
+            if (obstacle.getCoordinate().getX() == x && obstacle.getCoordinate().getY() == y) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public Coordinate getCurrentPosition() {
         return position;
@@ -224,7 +232,7 @@ class BasicRover extends AbstractRover {
         // logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
     }
     //This method checks if the coordinates are one of the obstacle coordinates by comparing it with current coordinates
-    private boolean isObstacleAt(int x, int y) {
+    protected boolean isObstacleAt(int x, int y) {
         for (Obstacle obstacle : obstacles) {
             if (obstacle.getCoordinate().getX() == x && obstacle.getCoordinate().getY() == y) {
                 return true;
@@ -233,6 +241,112 @@ class BasicRover extends AbstractRover {
         return false;
     }
    
+}
+
+
+class JumpingRover extends AbstractRover {
+    public JumpingRover(Grid grid, List<Obstacle> obstacles, Logger logger, Coordinate startingPosition, String startingDirection) {
+        super(grid, obstacles, logger, startingPosition, startingDirection);
+    }
+
+    @Override
+    public void move() throws BoundaryViolationException {
+        int x = position.getX();
+        int y = position.getY();
+
+        switch (direction) {
+            case "North":
+                y++;
+                break;
+            case "South":
+                y--;
+                break;
+            case "East":
+                x++;
+                break;
+            case "West":
+                x--;
+                break;
+        }
+
+        // Check for obstacles
+        if (isObstacleAt(x, y)) {
+            // If obstacle detected, jump over it based on the direction
+            logger.log("Obstacle detected at (" + x + "," + y + "). Jumping over the obstacle.");
+    
+            switch (direction) {
+                case "North":
+                    y++;
+                    break;
+                case "South":
+                    y--;
+                    break;
+                case "East":
+                    x++;
+                    break;
+                case "West":
+                    x--;
+                    break;
+            }
+        }
+    
+
+        // Check boundaries
+        if (x < 0 || x >= grid.getWidth() || y < 0 || y >= grid.getHeight()) {
+            throw new BoundaryViolationException("Reached boundary.");
+        }
+
+        // Update position
+        position = new Coordinate(x, y);
+    }
+
+    @Override
+    public void turnLeft() {
+        switch (direction) {
+            case "North":
+                direction = "West";
+                break;
+            case "South":
+                direction = "East";
+                break;
+            case "East":
+                direction = "North";
+                break;
+            case "West":
+                direction = "South";
+                break;
+        }
+    }
+
+    @Override
+    public void turnRight() {
+        switch (direction) {
+            case "North":
+                direction = "East";
+                break;
+            case "South":
+                direction = "West";
+                break;
+            case "East":
+                direction = "South";
+                break;
+            case "West":
+                direction = "North";
+                break;
+        }
+    }
+    @Override
+    public String generateStatusReport() {
+        String status = "Rover is at (" + position.getX() + ", " + position.getY() + ") facing " + direction + ". ";
+
+        if (isObstacleAt(position.getX(), position.getY())) {
+            status += "Obstacle detected.";
+        } else {
+            status += "No Obstacles detected.";
+        }
+
+        return status;
+    }
 }
 //Main Class Mars_Rover
 class Mars_Rover {
@@ -259,8 +373,19 @@ class Mars_Rover {
         int y = scanner.nextInt();
         String direction = scanner.next();
         
-        //Created an object referencing BasicRover of type AbstractRover. 
-        AbstractRover rover = new BasicRover(grid, obstacles, logger, new Coordinate(x, y), direction);
+        System.out.println("Choose rover type: 'B' for Basic Rover, 'J' for Jumping Rover");
+        char roverType = scanner.next().charAt(0);
+
+        AbstractRover rover;
+
+        if (roverType == 'B') {
+            rover = new BasicRover(grid, obstacles, logger, new Coordinate(x, y), direction);
+        } else if (roverType == 'J') {
+            rover = new JumpingRover(grid, obstacles, logger, new Coordinate(x, y), direction);
+        } else {
+            System.out.println("Invalid rover type. Exiting program.");
+            return;
+        }
 
 
         System.out.println("Welcome to Rover Control Program.");
