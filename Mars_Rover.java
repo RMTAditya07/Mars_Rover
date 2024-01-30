@@ -244,7 +244,7 @@ class BasicRover extends AbstractRover {
 }
 
 
-class JumpingRover extends AbstractRover {
+class JumpingRover extends BasicRover {
     public JumpingRover(Grid grid, List<Obstacle> obstacles, Logger logger, Coordinate startingPosition, String startingDirection) {
         super(grid, obstacles, logger, startingPosition, startingDirection);
     }
@@ -254,6 +254,7 @@ class JumpingRover extends AbstractRover {
         int x = position.getX();
         int y = position.getY();
 
+        // Calculate the new coordinates based on the direction
         switch (direction) {
             case "North":
                 y++;
@@ -273,7 +274,7 @@ class JumpingRover extends AbstractRover {
         if (isObstacleAt(x, y)) {
             // If obstacle detected, jump over it based on the direction
             logger.log("Obstacle detected at (" + x + "," + y + "). Jumping over the obstacle.");
-    
+
             switch (direction) {
                 case "North":
                     y++;
@@ -289,7 +290,6 @@ class JumpingRover extends AbstractRover {
                     break;
             }
         }
-    
 
         // Check boundaries
         if (x < 0 || x >= grid.getWidth() || y < 0 || y >= grid.getHeight()) {
@@ -299,55 +299,9 @@ class JumpingRover extends AbstractRover {
         // Update position
         position = new Coordinate(x, y);
     }
-
-    @Override
-    public void turnLeft() {
-        switch (direction) {
-            case "North":
-                direction = "West";
-                break;
-            case "South":
-                direction = "East";
-                break;
-            case "East":
-                direction = "North";
-                break;
-            case "West":
-                direction = "South";
-                break;
-        }
-    }
-
-    @Override
-    public void turnRight() {
-        switch (direction) {
-            case "North":
-                direction = "East";
-                break;
-            case "South":
-                direction = "West";
-                break;
-            case "East":
-                direction = "South";
-                break;
-            case "West":
-                direction = "North";
-                break;
-        }
-    }
-    @Override
-    public String generateStatusReport() {
-        String status = "Rover is at (" + position.getX() + ", " + position.getY() + ") facing " + direction + ". ";
-
-        if (isObstacleAt(position.getX(), position.getY())) {
-            status += "Obstacle detected.";
-        } else {
-            status += "No Obstacles detected.";
-        }
-
-        return status;
-    }
 }
+
+
 //Main Class Mars_Rover
 class Mars_Rover {
     public static void main(String[] args) {
