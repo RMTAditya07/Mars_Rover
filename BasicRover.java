@@ -21,6 +21,7 @@ class BasicRover extends AbstractRover {
         
         return status;
     }
+    
     //implementation of movable interface's move() method
     @Override
     public void move() throws BoundaryViolationException {
@@ -68,9 +69,10 @@ class BasicRover extends AbstractRover {
             logger.log("Cannot move. Obstacle detected at (" + x + "," + y + ")");
         }
     }
+    
+    
     //implementation of Turnable interface's turnLeft method
     //based on the previous direction, it is updated accordingly.
-
     @Override
     public void turnLeft() {
         switch (direction) {
@@ -90,6 +92,7 @@ class BasicRover extends AbstractRover {
 
         // logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
     }
+   
     //implementation of Turnable interface's turnRight method
     //based on the previous direction, it is updated accordingly.
     @Override
@@ -111,6 +114,7 @@ class BasicRover extends AbstractRover {
 
         // logger.log("Rover is at ("+position.getX()+","+position.getY() + ") facing " + direction);
     }
+   
     //This method checks if the coordinates are one of the obstacle coordinates by comparing it with current coordinates
     protected boolean isObstacleAt(int x, int y) {
         for (Obstacle obstacle : obstacles) {

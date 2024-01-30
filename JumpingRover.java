@@ -57,3 +57,16 @@ public class JumpingRover extends BasicRover {
     }
 }
  
+
+// class JumpingRover extends BasicRover {
+//     public JumpingRover(Grid grid, List<Obstacle> obstacles, Logger logger, Coordinate startingPosition, String startingDirection) {
+//         super(grid, obstacles, logger, startingPosition, startingDirection);
+//     }
+
+//     @Override
+//     public void move() throws BoundaryViolationException {
+//         // Intentional violation of LSP - changing the behavior of the superclass
+//         logger.log("Jumping Rover is jumping without checking for obstacles!");
+//         super.move(); // Call the move method of the superclass
+//     }
+// }
